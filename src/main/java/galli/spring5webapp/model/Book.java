@@ -10,10 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 
-/**
- * Created by jt on 5/16/17.
- */
 @Entity
 public class Book {
     
@@ -22,7 +20,9 @@ public class Book {
 	private Long id;
     private String title;
     private String isbn;
-    private String publisher;
+
+	@OneToOne
+	private Publisher publisher;
 
     @ManyToMany
     @JoinTable(name="author_book", joinColumns=@JoinColumn(name="book_id"), inverseJoinColumns=@JoinColumn(name="author_id"))
@@ -31,13 +31,18 @@ public class Book {
     public Book() {
     }
 
-    public Book(String title, String isbn, String publisher) {
+	public Book(String title, String isbn) {
+		this.title = title;
+		this.isbn = isbn;
+	}
+
+	public Book(String title, String isbn, Publisher publisher) {
         this.title = title;
         this.isbn = isbn;
         this.publisher = publisher;
     }
 
-    public Book(String title, String isbn, String publisher, Set<Author> authors) {
+	public Book(String title, String isbn, Publisher publisher, Set<Author> authors) {
         this.title = title;
         this.isbn = isbn;
         this.publisher = publisher;
@@ -69,11 +74,11 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public String getPublisher() {
+	public Publisher getPublisher() {
         return publisher;
     }
 
-    public void setPublisher(String publisher) {
+	public void setPublisher(Publisher publisher) {
         this.publisher = publisher;
     }
 
@@ -89,7 +94,11 @@ public class Book {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((authors == null) ? 0 : authors.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((isbn == null) ? 0 : isbn.hashCode());
+		result = prime * result + ((publisher == null) ? 0 : publisher.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
 
@@ -102,10 +111,30 @@ public class Book {
 		if (getClass() != obj.getClass())
 			return false;
 		Book other = (Book) obj;
+		if (authors == null) {
+			if (other.authors != null)
+				return false;
+		} else if (!authors.equals(other.authors))
+			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (isbn == null) {
+			if (other.isbn != null)
+				return false;
+		} else if (!isbn.equals(other.isbn))
+			return false;
+		if (publisher == null) {
+			if (other.publisher != null)
+				return false;
+		} else if (!publisher.equals(other.publisher))
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
 			return false;
 		return true;
 	}
@@ -115,5 +144,6 @@ public class Book {
 		return "Book [id=" + id + ", title=" + title + ", isbn=" + isbn + ", publisher=" + publisher + ", authors="
 				+ authors + "]";
 	}
+
 
 }

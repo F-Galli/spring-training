@@ -9,9 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-/**
- * Created by jt on 5/16/17.
- */
 @Entity
 public class Author {
 
